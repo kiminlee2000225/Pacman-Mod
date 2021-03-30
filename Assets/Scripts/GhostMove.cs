@@ -453,4 +453,15 @@ public class GhostMove : MonoBehaviour {
         _timeToToggleWhite = Time.time + _toggleInterval;
     }
 
+	public bool isRunning()
+    {
+		if (state == State.Run)
+        {
+			return true;
+        } else
+        {
+			return false;
+        }
+    }
+
 }

@@ -6,7 +6,11 @@ public class PlayerController : MonoBehaviour
 {
     public AudioClip audioOof;
     public AudioClip wah;
+    public AudioClip powerUp;
     private AudioSource source;
+    public GameObject[] enemies;
+    bool powerUpPlayed = false;
+
     public float speed = 0.4f;
     Vector2 _dest = Vector2.zero;
     Vector2 _dir = Vector2.zero;
@@ -36,12 +40,39 @@ public class PlayerController : MonoBehaviour
         GM = GameObject.Find("Game Manager").GetComponent<GameManager>();
         SM = GameObject.Find("Game Manager").GetComponent<ScoreManager>();
         GUINav = GameObject.Find("UI Manager").GetComponent<GameGUINavigation>();
+        enemies = GameObject.FindGameObjectsWithTag("Enemy");
         _dest = transform.position;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        bool chasing = false;
+        foreach (GameObject e in enemies)
+        {
+            GhostMove gm = e.GetComponent<GhostMove>();
+            if (gm.isRunning())
+            {
+                chasing = true;
+            }
+        }
+        if (chasing && !powerUpPlayed)
+        {
+            source.PlayOneShot(powerUp, 1f);
+            powerUpPlayed = true;
+        } else
+        {
+            powerUpPlayed = false;
+        }
+        if (!chasing)
+        {
+            powerUpPlayed = false;
+        }
+        else
+        {
+            powerUpPlayed = true;
+        }
+
         switch (GameManager.gameState)
         {
             case GameManager.GameState.Game:
