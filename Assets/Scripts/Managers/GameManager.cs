@@ -68,6 +68,10 @@ public class GameManager : MonoBehaviour {
 	{
 		gameState = GameState.Init;
 	}
+    public void LoadSameLevel()
+    {
+        Application.LoadLevel("game");
+    }
 
     void OnLevelWasLoaded()
     {

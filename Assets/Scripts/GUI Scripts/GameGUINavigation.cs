@@ -218,7 +218,7 @@ public class GameGUINavigation : MonoBehaviour {
         Application.LoadLevel("game");
     }
 
-    public void ToggleErrorMsg(string errorMsg)
+	public void ToggleErrorMsg(string errorMsg)
     {
         if (ErrorCanvas.enabled)
         {

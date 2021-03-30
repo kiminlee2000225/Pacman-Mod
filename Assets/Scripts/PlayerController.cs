@@ -8,9 +8,11 @@ public class PlayerController : MonoBehaviour
     public AudioClip wah;
     public AudioClip powerUp;
     public AudioClip win;
+    public AudioClip lose;
     private AudioSource source;
     public GameObject[] enemies;
     bool powerUpPlayed = false;
+    bool gameOverDoneAlready = false;
 
     public float speed = 0.4f;
     Vector2 _dest = Vector2.zero;
@@ -83,7 +85,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case GameManager.GameState.Dead:
-                if (!_deadPlaying)
+                if (!_deadPlaying && !gameOverDoneAlready)
                     // sound effect for pacman death
                     source.PlayOneShot(wah, 1f);
                     StartCoroutine("PlayDeadAnimation");
@@ -98,18 +100,16 @@ public class PlayerController : MonoBehaviour
                 GhostMove gm = e.GetComponent<GhostMove>();
                 gm.SetWait();
             }
-            StartCoroutine(WaitCloseSplash());
+            StartCoroutine(GameWon());
         }
         Pacdot.allCollected = false;
 
 
     }
 
-    IEnumerator WaitCloseSplash()
+    IEnumerator GameWon()
     {
-        Debug.Log("inside func");
         yield return new WaitForSeconds(1.0f); // works if 1 is replaced with 0
-        Debug.Log("game won!");
         GameObject.FindObjectOfType<GameGUINavigation>().LoadLevel();
     }
 
@@ -130,17 +130,28 @@ public class PlayerController : MonoBehaviour
         GetComponent<Animator>().SetBool("Die", false);
         _deadPlaying = false;
 
-        if (GameManager.lives <= 0)
+        if (GameManager.lives <= 0 && !gameOverDoneAlready)
         {
-            Debug.Log("Treshold for High Score: " + SM.LowestHigh());
-            if (GameManager.score >= SM.LowestHigh())
-                GUINav.getScoresMenu();
-            else
-                GUINav.H_ShowGameOverScreen();
+            gameOverDoneAlready = true;
+            source.PlayOneShot(lose, 1f);
+            Time.timeScale = 1f;
+            StartCoroutine(GameOver());
         }
 
-        else
+        else if (!gameOverDoneAlready)
             GM.ResetScene();
+    }
+
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(3.0f); // works if 1 is replaced with 0
+        Debug.Log("Treshold for High Score: " + SM.LowestHigh());
+        //if (GameManager.score >= SM.LowestHigh())
+        //    GUINav.getScoresMenu();
+        //else
+        //    GUINav.H_ShowGameOverScreen();
+        Debug.Log("game over load level");
+        GM.LoadSameLevel();
     }
 
     void Animate()
