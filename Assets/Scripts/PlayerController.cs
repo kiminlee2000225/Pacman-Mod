@@ -4,7 +4,8 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public AudioClip audioOof;
+    private AudioSource source;
     public float speed = 0.4f;
     Vector2 _dest = Vector2.zero;
     Vector2 _dir = Vector2.zero;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        source = GetComponent<AudioSource>();
         GM = GameObject.Find("Game Manager").GetComponent<GameManager>();
         SM = GameObject.Find("Game Manager").GetComponent<ScoreManager>();
         GUINav = GameObject.Find("UI Manager").GetComponent<GameGUINavigation>();
@@ -53,6 +55,14 @@ public class PlayerController : MonoBehaviour
         }
 
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.name == "pacdot")
+        {
+            source.PlayOneShot(audioOof, 1f);
+        }
     }
 
     IEnumerator PlayDeadAnimation()
