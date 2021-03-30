@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class GhostMove : MonoBehaviour {
 
-    // ----------------------------
-    // Navigation variables
+	public AudioClip collectBlinky;
+	private AudioSource source;
+
+	// ----------------------------
+	// Navigation variables
 	private Vector3 waypoint;			// AI-determined waypoint
 	private Queue<Vector3> waypoints;	// waypoints used on Init and Scatter states
 
@@ -57,7 +60,8 @@ public class GhostMove : MonoBehaviour {
 	// variables end, functions begin
 	void Start()
 	{
-	    _gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
+		source = GetComponent<AudioSource>();
+		_gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _toggleInterval = _gm.scareLength * 0.33f * 0.20f;  
 		InitializeGhost();
 	}
@@ -298,7 +302,8 @@ public class GhostMove : MonoBehaviour {
 			//Destroy(other.gameObject);
 		    if (state == State.Run)
 		    {
-		        Calm();
+				source.PlayOneShot(collectBlinky, 1f);
+				Calm();
 		        InitializeGhost(_startPos);
                 pacman.UpdateScore();
 		    }

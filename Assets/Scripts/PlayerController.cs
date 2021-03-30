@@ -5,6 +5,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public AudioClip audioOof;
+    public AudioClip wah;
     private AudioSource source;
     public float speed = 0.4f;
     Vector2 _dest = Vector2.zero;
@@ -50,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
             case GameManager.GameState.Dead:
                 if (!_deadPlaying)
+                    // sound effect for pacman death
+                    source.PlayOneShot(wah, 1f);
                     StartCoroutine("PlayDeadAnimation");
                 break;
         }
@@ -61,7 +64,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.name == "pacdot")
         {
-            source.PlayOneShot(audioOof, 1f);
+            // sound effect for pacdot collecting
+            //source.PlayOneShot(audioOof, 1f);
         }
     }
 
