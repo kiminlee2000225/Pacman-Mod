@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip audioOof;
     public AudioClip wah;
     public AudioClip powerUp;
+    public AudioClip win;
     private AudioSource source;
     public GameObject[] enemies;
     bool powerUpPlayed = false;
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
         }
         if (chasing && !powerUpPlayed)
         {
+            // sound effect for large pacdot collected
             source.PlayOneShot(powerUp, 1f);
             powerUpPlayed = true;
         } else
@@ -87,8 +89,28 @@ public class PlayerController : MonoBehaviour
                     StartCoroutine("PlayDeadAnimation");
                 break;
         }
+        if (Pacdot.allCollected)
+        {
+            // sound effect for game won
+            source.PlayOneShot(win, 1f);
+            foreach (GameObject e in enemies)
+            {
+                GhostMove gm = e.GetComponent<GhostMove>();
+                gm.SetWait();
+            }
+            StartCoroutine(WaitCloseSplash());
+        }
+        Pacdot.allCollected = false;
 
 
+    }
+
+    IEnumerator WaitCloseSplash()
+    {
+        Debug.Log("inside func");
+        yield return new WaitForSeconds(1.0f); // works if 1 is replaced with 0
+        Debug.Log("game won!");
+        GameObject.FindObjectOfType<GameGUINavigation>().LoadLevel();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

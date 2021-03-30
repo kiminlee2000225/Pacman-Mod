@@ -3,7 +3,12 @@ using System.Collections;
 
 public class Pacdot : MonoBehaviour {
 
-	void OnTriggerEnter2D(Collider2D other)
+	public static bool allCollected = false;
+    private void Start()
+    {
+		allCollected = false;
+    }
+    void OnTriggerEnter2D(Collider2D other)
 	{
 		if(other.name == "pacman")
 		{
@@ -13,8 +18,9 @@ public class Pacdot : MonoBehaviour {
 
 		    if (pacdots.Length == 1)
 		    {
-		        GameObject.FindObjectOfType<GameGUINavigation>().LoadLevel();
-		    }
+				allCollected = true;
+			}
 		}
 	}
+
 }

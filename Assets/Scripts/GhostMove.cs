@@ -302,6 +302,7 @@ public class GhostMove : MonoBehaviour {
 			//Destroy(other.gameObject);
 		    if (state == State.Run)
 		    {
+				// sound for collecting enemy
 				source.PlayOneShot(collectBlinky, 1f);
 				Calm();
 		        InitializeGhost(_startPos);
@@ -462,6 +463,11 @@ public class GhostMove : MonoBehaviour {
         {
 			return false;
         }
+    }
+
+	public void SetWait()
+    {
+		state = State.Wait;
     }
 
 }
