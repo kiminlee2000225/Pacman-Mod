@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     bool powerUpPlayed = false;
     bool gameOverDoneAlready = false;
     bool winSoundPlayed = false;
+    bool gameOver = false;
 
     public float speed = 0.4f;
     Vector2 _dest = Vector2.zero;
@@ -86,6 +87,11 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case GameManager.GameState.Dead:
+                foreach (GameObject e in enemies)
+                {
+                    GhostMove gm = e.GetComponent<GhostMove>();
+                    gm.SetWait();
+                }
                 if (!_deadPlaying && !gameOverDoneAlready)
                     // sound effect for pacman death
                     source.PlayOneShot(wah, 1f);
@@ -114,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator GameWon()
     {
-        yield return new WaitForSeconds(6.0f); // works if 1 is replaced with 0
+        yield return new WaitForSeconds(7.0f); // works if 1 is replaced with 0
         GameObject.FindObjectOfType<GameGUINavigation>().LoadLevel();
     }
 
@@ -141,15 +147,17 @@ public class PlayerController : MonoBehaviour
             source.PlayOneShot(lose, 1f);
             Time.timeScale = 1f;
             StartCoroutine(GameOver());
+            gameOver = true;
         }
 
-        else if (!gameOverDoneAlready)
+        else if (!gameOverDoneAlready && !gameOver)
+            print("reset scene");
             GM.ResetScene();
     }
 
     IEnumerator GameOver()
     {
-        yield return new WaitForSeconds(3.0f); // works if 1 is replaced with 0
+        yield return new WaitForSeconds(185.0f); // works if 1 is replaced with 0
         Debug.Log("Treshold for High Score: " + SM.LowestHigh());
         //if (GameManager.score >= SM.LowestHigh())
         //    GUINav.getScoresMenu();
@@ -190,10 +198,13 @@ public class PlayerController : MonoBehaviour
         GetComponent<Rigidbody2D>().MovePosition(p);
 
         // get the next direction from keyboard
-        if (Input.GetAxis("Horizontal") > 0) _nextDir = Vector2.right;
-        if (Input.GetAxis("Horizontal") < 0) _nextDir = -Vector2.right;
-        if (Input.GetAxis("Vertical") > 0) _nextDir = Vector2.up;
-        if (Input.GetAxis("Vertical") < 0) _nextDir = -Vector2.up;
+        if (!gameOver && !Pacdot.allCollected)
+        {
+            if (Input.GetAxis("Horizontal") > 0) _nextDir = Vector2.right;
+            if (Input.GetAxis("Horizontal") < 0) _nextDir = -Vector2.right;
+            if (Input.GetAxis("Vertical") > 0) _nextDir = Vector2.up;
+            if (Input.GetAxis("Vertical") < 0) _nextDir = -Vector2.up;
+        }
 
         // if pacman is in the center of a tile
         if (Vector2.Distance(_dest, transform.position) < 0.00001f)
