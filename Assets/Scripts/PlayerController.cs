@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public GameObject[] enemies;
     bool powerUpPlayed = false;
     bool gameOverDoneAlready = false;
+    bool winSoundPlayed = false;
 
     public float speed = 0.4f;
     Vector2 _dest = Vector2.zero;
@@ -94,22 +95,26 @@ public class PlayerController : MonoBehaviour
         if (Pacdot.allCollected)
         {
             // sound effect for game won
-            source.PlayOneShot(win, 1f);
+            if (!winSoundPlayed)
+            {
+                source.PlayOneShot(win, 1f);
+            }
             foreach (GameObject e in enemies)
             {
                 GhostMove gm = e.GetComponent<GhostMove>();
                 gm.SetWait();
             }
             StartCoroutine(GameWon());
+            winSoundPlayed = true;
         }
-        Pacdot.allCollected = false;
+        //Pacdot.allCollected = false;
 
 
     }
 
     IEnumerator GameWon()
     {
-        yield return new WaitForSeconds(1.0f); // works if 1 is replaced with 0
+        yield return new WaitForSeconds(6.0f); // works if 1 is replaced with 0
         GameObject.FindObjectOfType<GameGUINavigation>().LoadLevel();
     }
 
@@ -118,7 +123,7 @@ public class PlayerController : MonoBehaviour
         if (collision.name == "pacdot")
         {
             // sound effect for pacdot collecting
-            //source.PlayOneShot(audioOof, 1f);
+            source.PlayOneShot(audioOof, 0.3f);
         }
     }
 
