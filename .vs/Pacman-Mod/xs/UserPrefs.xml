@@ -1,13 +1,13 @@
 ﻿<Properties StartupConfiguration="{D6DFAC19-40CE-D31F-3E18-86B4C0F309C1}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/PlayerController.cs">
     <Files>
-      <File FileName="Assets/Scripts/PlayerController.cs" Line="121" Column="13" />
-      <File FileName="Assets/Scripts/GhostMove.cs" />
+      <File FileName="Assets/Scripts/PlayerController.cs" Line="123" Column="42" />
+      <File FileName="Assets/Scripts/GhostMove.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/AI.cs" Line="110" Column="1" />
       <File FileName="Assets/Scripts/Pacdot.cs" />
       <File FileName="Assets/Scripts/Managers/ScoreManager.cs" />
-      <File FileName="Assets/Scripts/Managers/GameManager.cs" />
-      <File FileName="Assets/Scripts/GUI Scripts/GameGUINavigation.cs" />
+      <File FileName="Assets/Scripts/Managers/GameManager.cs" Line="10" Column="32" />
+      <File FileName="Assets/Scripts/GUI Scripts/GameGUINavigation.cs" Line="220" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
